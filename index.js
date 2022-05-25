@@ -7,6 +7,11 @@ const app=express();
 app.use('/',require('./routes'));
 
 
+// view engine setted up
+app.set('view engine', 'ejs');
+app.set('views','./views')
+
+
 app.listen(port,(err)=>{
     if(err){
         // console.log("error in creating server",err);
