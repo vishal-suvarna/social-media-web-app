@@ -3,7 +3,8 @@ const port=8000;
 
 const app=express();
 
-
+// use express router which was exported
+app.use('/',require('./routes'));
 
 app.listen(port,(err)=>{
     if(err){
