@@ -6,6 +6,7 @@ const app=express();
 // use express router which was exported
 app.use('/',require('./routes'));
 
+
 app.listen(port,(err)=>{
     if(err){
         // console.log("error in creating server",err);

@@ -7,5 +7,15 @@ router.get('/',homeController.home);
 router.get('/about',homeController.about);
 router.get('/contactus',homeController.contactUs);
 
+
+
+// for any further routes access from here like belowwwwww!!!!
+// router.use('/routerName',require('./routerFile'));
+
+// handles the user requests
+router.use('/users',require('./users'));
+// handles the product requests
+router.use('/products',require('./product'));
+
 // exported the router to index.js 
 module.exports=router;
