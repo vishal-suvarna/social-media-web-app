@@ -1,51 +1,71 @@
-const User = require("../models/user");
+const User = require('../models/user');
 
-module.exports.profile = (req, res) => {
-  return res.render("users", {
-    title: "Users",
-  });
-};
-// user sign in page will load
-module.exports.signIn = (req, res) => {
-  return res.render("../views/users/user_sign_in.ejs", {
-    title: "User SignIn",
-  });
-};
-// user sign up page will load
-module.exports.signUp = (req, res) => {
-  return res.render("../views/users/user_sign_up.ejs", {
-    title: "User SignUp",
-  });
-};
-// module.exports.profile=(req,res)=>{
-//     return res.end("<h1>User Profile</h1>");
-// }
 
-// get the sign up data from form
-module.exports.create = (req, res) => {
-  if (req.body.password != req.body.c_password) {
-    return res.redirect("back");
-  }
-  User.findOne({ email: req.body.email }, (err, user) => {
-    if (err) {
-      console.log("error in finding user in sign up and return");
-      return;
+module.exports.profile = function(req, res){
+    return res.render('user_profile', {
+        title: 'User Profile'
+    })
+}
+
+
+// render the sign up page
+module.exports.signUp = function(req, res){
+    if (req.isAuthenticated()){
+        return res.redirect('/users/profile');
     }
-    if (!user) {
-      User.create(req.body, (err, user) => {
-        if (err) {
-          console.log("error in creating user in sign up");
-          return;
+
+
+    return res.render('user_sign_up', {
+        title: "Codeial | Sign Up"
+    })
+}
+
+
+// render the sign in page
+module.exports.signIn = function(req, res){
+
+    if (req.isAuthenticated()){
+        return res.redirect('/users/profile');
+    }
+    return res.render('user_sign_in', {
+        title: "Codeial | Sign In"
+    })
+}
+
+// get the sign up data
+module.exports.create = function(req, res){
+    if (req.body.password != req.body.confirm_password){
+        return res.redirect('back');
+    }
+
+    User.findOne({email: req.body.email}, function(err, user){
+        if(err){console.log('error in finding user in signing up'); return}
+
+        if (!user){
+            User.create(req.body, function(err, user){
+                if(err){console.log('error in creating user while signing up'); return}
+
+                return res.redirect('/users/sign-in');
+            })
+        }else{
+            return res.redirect('back');
         }
-        return res.redirect("/users/sign-in");
-      });
-    } else {
-      return res.redirect("back");
-    }
-  });
-};
 
-// to sign in and create session for the user to browseee!!!
-module.exports.createSession = (req, res) => {
-  // TODO
-};
+    });
+}
+
+
+// sign in and create a session for the user
+module.exports.createSession = function(req, res){
+    return res.redirect('/');
+}
+
+module.exports.destroySession = function(req, res,next){
+    req.logout((err)=>{
+        if(err){
+            next(err);
+        }
+    });
+
+    return res.redirect('/');
+}
