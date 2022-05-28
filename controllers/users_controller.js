@@ -35,6 +35,7 @@ module.exports.signIn = function(req, res){
 // get the sign up data
 module.exports.create = function(req, res){
     if (req.body.password != req.body.confirm_password){
+        console.log("Password and confirm password does not match")
         return res.redirect('back');
     }
 
